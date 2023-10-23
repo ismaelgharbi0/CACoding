@@ -6,7 +6,9 @@ import interface_adapter.login.LoginViewModel;
 import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.signup.SignupViewModel;
 import interface_adapter.ViewManagerModel;
-import use_case.login.LoginUserDataAccessInterface;
+import interface_adapter.clear_users.ClearController;
+import use_case.clear_users.ClearInputBoundary;
+import use_case.clear_users.ClearInputData;
 import view.LoggedInView;
 import view.LoginView;
 import view.SignupView;
@@ -39,9 +41,16 @@ public class Main {
         // This information will be changed by a presenter object that is reporting the
         // results from the use case. The ViewModels are observable, and will
         // be observed by the Views.
+        ClearInputBoundary clearUseCaseInteractor = new ClearInputBoundary() {
+            @Override
+            public void execute(ClearInputData clearInputData) {
+
+            }
+        };
         LoginViewModel loginViewModel = new LoginViewModel();
         LoggedInViewModel loggedInViewModel = new LoggedInViewModel();
         SignupViewModel signupViewModel = new SignupViewModel();
+        ClearController clearController = new ClearController(clearUseCaseInteractor);
 
         FileUserDataAccessObject userDataAccessObject;
         try {
@@ -55,6 +64,7 @@ public class Main {
 
         LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel, loggedInViewModel, userDataAccessObject);
         views.add(loginView, loginView.viewName);
+
 
         LoggedInView loggedInView = new LoggedInView(loggedInViewModel);
         views.add(loggedInView, loggedInView.viewName);
